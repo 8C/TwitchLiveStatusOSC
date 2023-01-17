@@ -8,7 +8,7 @@ from pythonosc.udp_client import SimpleUDPClient
 IP, PORT = "127.0.0.1", 9000
 client = SimpleUDPClient(IP, PORT) 
 announced = False
-buffer = 5 * 60 #5min
+buffer = 5 * 60 #5min delay
 
 request_token_url = f"https://id.twitch.tv/oauth2/token?client_id={config.twitch_api_key}&client_secret={config.twitch_api_secret}&grant_type=client_credentials"
 reponse = requests.post(request_token_url)
@@ -25,11 +25,11 @@ if __name__ == '__main__':
         print(f'Checking if {config.twitch_username} is live on twitch...')
         response = requests.get(f'https://api.twitch.tv/helix/streams?user_login={config.twitch_username}', headers=header)
         if response.status_code == 200:
-            data = response.json()["data"]
+            data = response.json()["data"] #lazy rn
             if data:
                 if not announced:
                     client.send_message(f'/avatar/parameters/{config.vrc_param}', True)
-                    print("user is live on twitch!")
+                    print("User is live on twitch")
                     announced = True
                     time.sleep(buffer)
                 else:
@@ -37,11 +37,11 @@ if __name__ == '__main__':
             else:
                 if announced:
                     client.send_message(f'/avatar/parameters/{config.vrc_param}', False)
-                    print("user is no longer live on twitch")
+                    print("User is no longer live on twitch")
                     announced = False
                     time.sleep(buffer)
                 else:
-                    print("user is not live on twitch right now")
+                    print("User is not live on twitch right now")
                     client.send_message(f'/avatar/parameters/{config.vrc_param}', False)
                     announced = False
                     time.sleep(buffer)
