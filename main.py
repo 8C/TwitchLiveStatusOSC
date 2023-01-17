@@ -2,7 +2,6 @@ import config
 import time
 import requests
 import platform
-import urllib.request
 import os
 from pythonosc.udp_client import SimpleUDPClient
 
@@ -16,23 +15,7 @@ reponse = requests.post(request_token_url)
 print(reponse)
 token = reponse.json()['access_token']
 header = {'Client-ID': config.twitch_api_key, "Authorization": f'Bearer {token}'}
-
 cls = "cls" if platform.system() == "Windows" else "clear"
-
-
-def getThumbnail(url):
-    folder_path = "./thumbnail/"
-    if not os.path.exists(folder_path):
-        os.mkdir(folder_path)
-    file_name = 'thumbnail.jpg'
-
-    #if thumbnail already exists, delete it
-    if os.path.exists(os.path.join(folder_path, file_name)):
-        os.remove(os.path.join(folder_path, file_name))
-
-
-    local_file = os.path.join(folder_path, file_name)
-    urllib.request.urlretrieve(url, local_file)
 
 
 if __name__ == '__main__':
@@ -44,13 +27,6 @@ if __name__ == '__main__':
         if response.status_code == 200:
             data = response.json()["data"]
             if data:
-                broadcaster = data[0]
-                broadcaster_id = broadcaster["id"]
-                broadcaster_name = broadcaster["user_name"]
-                broadcaster_game = broadcaster["game_name"]
-                stream_title = broadcaster["title"]
-
-
                 if not announced:
                     client.send_message(f'/avatar/parameters/{config.vrc_param}', True)
                     print("user is live on twitch!")
