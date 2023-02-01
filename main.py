@@ -30,7 +30,7 @@ if __name__ == '__main__':
                 if not announced:
                     client.send_message(f'/avatar/parameters/{config.vrc_param}', True)
                     print("User is live on twitch")
-                    announced = True
+                    #announced = True
                     time.sleep(buffer)
                 else:
                     time.sleep(buffer)
@@ -38,12 +38,12 @@ if __name__ == '__main__':
                 if announced:
                     client.send_message(f'/avatar/parameters/{config.vrc_param}', False)
                     print("User is no longer live on twitch")
-                    announced = False
+                    #announced = False
                     time.sleep(buffer)
                 else:
                     print("User is not live on twitch right now")
                     client.send_message(f'/avatar/parameters/{config.vrc_param}', False)
-                    announced = False
+                    #announced = False
                     time.sleep(buffer)
         else:
             print('Error: ' + str(response.status_code) + ' ' + response.text)
